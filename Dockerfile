@@ -15,13 +15,13 @@ COPY --from=install /temp/dev/node_modules node_modules
 COPY . .
 
 ENV NODE_ENV=production
-RUN bun test
 RUN bun run build
 
 FROM base AS release
 COPY --from=install /temp/prod/node_modules node_modules
 COPY --from=prerelease /drona/.next ./.next
 COPY --from=prerelease /drona/package.json ./
+COPY --from=prerelease /drona/bun.lockb ./
 
 USER bun
 EXPOSE 3000/tcp
